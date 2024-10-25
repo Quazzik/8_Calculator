@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "Тот самый калькулятор";
+}
+
+<h2 class="title">@ViewData["Title"]</h2>
+
+<div class="calculator-container">
+    <div class="input-container">
+        <form method="post" asp-controller="Home" asp-action="Calculate" class="calculator-form">
+            @Html.AntiForgeryToken()
+
+            <div class="input-row">
+                <input type="text" name="num1" id="num1" class="input-field" placeholder="Операнд 1" required />
+
+                <select name="operation" id="operation" class="select-field" required>
+                    <option value="Add">+</option>
+                    <option value="Subtract">-</option>
+                    <option value="Multiply">*</option>
+                    <option value="Divide">/</option>
+                </select>
+
+                <input type="text" name="num2" id="num2" class="input-field" placeholder="Операнд 2" required />
+
+                <input type="submit" value="=" class="submit-button" />
+
+                <input type="text" value="@ViewBag.Result" class="result-field" readonly />
+            </div>
+        </form>
+    </div>
+
+    <!-- Обводка для старых результатов -->
+    <div class="old-results-container">
+        <h3>Прошлые результаты:</h3>
+
+        <table class="calculation-table">
+            <thead>
+                <tr>
+                    <th>Операнд 1</th>
+                    <th>Операнд 2</th>
+                    <th>Операция</th>
+                    <th>Результат</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var calc in ViewBag.Calculations)
+                {
+                    <tr>
+                        <td>@calc.Operand1</td>
+                        <td>@calc.Operand2</td>
+                        <td>@calc.Operation</td>
+                        <td>@calc.Result</td>
+                        <td>
+                            <form method="post" asp-controller="Home" asp-action="Delete">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@calc.Id" />
+                                <input type="submit" value="Удалить" class="delete-button" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .calculator-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 3px solid #8A2BE2;
+        border-radius: 8px;
+        background-color: #f3f1f9;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .input-container {
+        border: 2px solid #8A2BE2;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        text-align: center;
+        color: #8A2BE2;
+    }
+
+    .calculator-form {
+        display: flex;
+        justify-content: center;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .input-field, .select-field, .submit-button, .result-field {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-field {
+        width: 120px;
+        text-align: center;
+        color: #333;
+    }
+
+    .select-field {
+        width: 60px;
+        background-color: #fff;
+        text-align: center;
+    }
+
+    .submit-button {
+        background-color: #8A2BE2;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        border: none;
+        padding: 0 15px;
+        transition: background-color 0.3s;
+    }
+
+        .submit-button:hover {
+            background-color: #6a1bb8;
+        }
+
+    .result-field {
+        width: 100px;
+        background-color: #e8e0f4;
+        font-weight: bold;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .old-results-container {
+        border: 2px solid #8A2BE2;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .calculation-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .calculation-table th, .calculation-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .calculation-table th {
+            background-color: #8A2BE2;
+            color: white;
+        }
+
+    .delete-button {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .delete-button:hover {
+            background-color: darkred;
+        }
+</style>
