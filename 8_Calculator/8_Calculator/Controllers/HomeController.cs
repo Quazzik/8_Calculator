@@ -1,9 +1,6 @@
 using _8_Calculator.DB.Entities;
 using _8_Calculator.Enums;
-using _8_Calculator.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
 using static _8_Calculator.Enums.OperationEnum;
 
 namespace _8_Calculator.Controllers
@@ -18,9 +15,25 @@ namespace _8_Calculator.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            SetOldResults();
+            const int pageSize = 8; // количество записей на странице
+            var calculations = _context.Calculations.ToList();
+            calculations.Reverse();
+
+            foreach (var calculation in calculations)
+            {
+                calculation.Operation = OperationEnum.Convert(calculation.Operation);
+            }
+
+            var totalCount = calculations.Count;
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+            var results = calculations.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.Calculations = results;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View();
         }
 
@@ -34,8 +47,7 @@ namespace _8_Calculator.Controllers
                 _context.Calculations.Remove(calculation);
                 _context.SaveChanges();
             }
-            SetOldResults();
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -70,18 +82,7 @@ namespace _8_Calculator.Controllers
             _context.Calculations.Add(calc);
             _context.SaveChanges();
 
-            SetOldResults();
-
-            return View("Index");
-        }
-        public void SetOldResults()
-        {
-            var calculations = _context.Calculations.ToList();
-            foreach (var calculation in calculations)
-            {
-                calculation.Operation = OperationEnum.Convert(calculation.Operation);
-            }
-            ViewBag.Calculations = calculations;
+            return RedirectToAction("Index");
         }
     }
 }
