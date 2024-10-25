@@ -25,7 +25,7 @@
 
                 <input type="submit" value="=" class="submit-button" />
 
-                <input type="text" value="@ViewBag.Result" class="result-field" readonly />
+                <input type="text" value="@TempData["Result"]" class="result-field" readonly />
             </div>
         </form>
     </div>
@@ -38,8 +38,8 @@
             <thead>
                 <tr>
                     <th>Операнд 1</th>
-                    <th>Операнд 2</th>
                     <th>Операция</th>
+                    <th>Операнд 2</th>
                     <th>Результат</th>
                     <th>Действие</th>
                 </tr>
@@ -49,8 +49,8 @@
                 {
                     <tr>
                         <td>@calc.Operand1</td>
-                        <td>@calc.Operand2</td>
                         <td>@calc.Operation</td>
+                        <td>@calc.Operand2</td>
                         <td>@calc.Result</td>
                         <td>
                             <form method="post" asp-controller="Home" asp-action="Delete">

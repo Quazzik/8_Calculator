@@ -14,7 +14,7 @@ namespace _8_Calculator.Enums
 
         public static string Convert(string operand)
         {
-            string ret = operand switch
+            string ret = operand switch //переписать switch на старую анотацию
             {
                 "Add" => "+",
                 "Subtract" => "-",

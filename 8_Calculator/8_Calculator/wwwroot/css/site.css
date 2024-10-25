@@ -81,12 +81,15 @@
 .calculation-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
     .calculation-table th, .calculation-table td {
         padding: 10px;
         text-align: center;
         border: 1px solid #ccc;
+        overflow: auto;
+        text-overflow:initial;
     }
 
     .calculation-table th {

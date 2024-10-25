@@ -1,6 +1,8 @@
 using _8_Calculator.DB.Entities;
 using _8_Calculator.Enums;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using static _8_Calculator.Enums.OperationEnum;
 
 namespace _8_Calculator.Controllers
@@ -70,7 +72,7 @@ namespace _8_Calculator.Controllers
                     result = num1 / num2;
                     break;
             }
-            ViewBag.Result = result;
+            TempData["Result"] = result.ToString();
 
             var calc = new Calculation
             {
