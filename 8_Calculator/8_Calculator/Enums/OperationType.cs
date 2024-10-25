@@ -1,10 +1,28 @@
-﻿namespace _8_Calculator.Enums
+﻿using _8_Calculator.DB.Entities;
+
+namespace _8_Calculator.Enums
 {
-    public enum OperationType
+    public class OperationEnum
     {
-        Add,
-        Subtract,
-        Multiply,
-        Divide
+        public enum OperationType
+        {
+            Add,
+            Subtract,
+            Multiply,
+            Divide
+        }
+
+        public static string Convert(string operand)
+        {
+            string ret = operand switch
+            {
+                "Add" => "+",
+                "Subtract" => "-",
+                "Multiply" => "*",
+                "Divide" => "/",
+                _ => "Ошибка"
+            };
+            return ret;
+        }
     }
 }

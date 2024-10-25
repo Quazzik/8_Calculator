@@ -1,6 +1,7 @@
 ﻿using _8_Calculator.DB.Entities;
 using _8_Calculator.Enums;
 using Microsoft.AspNetCore.Mvc;
+using static _8_Calculator.Enums.OperationEnum;
 
 namespace Calculator.Controllers
 {
@@ -16,6 +17,8 @@ namespace Calculator.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            SetOldResults();
+
             return View();
         }
 
@@ -51,7 +54,18 @@ namespace Calculator.Controllers
             _context.Calculations.Add(calc);
             _context.SaveChanges();
 
+            SetOldResults();
+
             return View("Index");
+        }
+        public void SetOldResults()
+        {
+            var calculations = _context.Calculations.ToList();
+            foreach (var calculation in calculations)
+            {
+                calculation.Operation = OperationEnum.Convert(calculation.Operation);
+            }
+            ViewBag.Calculations = calculations;
         }
     }
 }

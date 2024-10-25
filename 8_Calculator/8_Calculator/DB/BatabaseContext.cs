@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using _8_Calculator.DB.Entities;
 using _8_Calculator.Enums;
+using static _8_Calculator.Enums.OperationEnum;
 
 public class BatabaseContext : DbContext
 {

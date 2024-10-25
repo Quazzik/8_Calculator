@@ -1,23 +1,122 @@
 ﻿@{
-    ViewData["Title"] = "Simple Calculator";
+    ViewData["Title"] = "Тот самый калькулятор";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="title">@ViewData["Title"]</h2>
 
-<form method="post" asp-controller="Calculator" asp-action="Calculate">
-    @Html.AntiForgeryToken()
-    <input type="text" name="num1" required />
-    <select name="operation" required>
-        <option value="Add">+</option>
-        <option value="Subtract">-</option>
-        <option value="Multiply">*</option>
-        <option value="Divide">/</option>
-    </select>
-    <input type="text" name="num2" required />
-    <input type="submit" value="Calculate" />
-</form>
+<div class="calculator-container">
+    <form method="post" asp-controller="Calculator" asp-action="Calculate" class="calculator-form">
+        @Html.AntiForgeryToken()
 
-@if (ViewBag.Result != null)
-{
-    <h3>Result: @ViewBag.Result</h3>
-}
+        <div class="input-row">
+            <input type="text" name="num1" id="num1" class="input-field" placeholder="Операнд 1" required />
+
+            <select name="operation" id="operation" class="select-field" required>
+                <option value="Add">+</option>
+                <option value="Subtract">-</option>
+                <option value="Multiply">*</option>
+                <option value="Divide">/</option>
+            </select>
+
+            <input type="text" name="num2" id="num2" class="input-field" placeholder="Операнд 2" required />
+
+            <input type="submit" value="=" class="submit-button" />
+
+            <input type="text" value="@ViewBag.Result" class="result-field" readonly />
+        </div>
+    </form>
+
+    <!-- Таблица с расчётами -->
+    <div class="calculation-table-container">
+        <table class="calculation-table">
+            <thead>
+                <tr>
+                    <th>Операнд 1</th>
+                    <th>Операнд 2</th>
+                    <th>Операция</th>
+                    <th>Результат</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var calc in ViewBag.Calculations)
+                {
+                    <tr>
+                        <td>@calc.Operand1</td>
+                        <td>@calc.Operand2</td>
+                        <td>@calc.Operation</td>
+                        <td>@calc.Result</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .calculator-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 3px solid #8A2BE2; /* Увеличенная обводка */
+        border-radius: 8px;
+        background-color: #f3f1f9;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .title {
+        text-align: center;
+        color: #8A2BE2;
+    }
+
+    .calculator-form {
+        display: flex;
+        justify-content: center;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .input-field, .select-field, .submit-button, .result-field {
+        padding: 8px; /* Меньший padding */
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-field {
+        width: 120px; /* Уменьшена ширина полей ввода */
+        text-align: center;
+        color: #333;
+    }
+
+    .select-field {
+        width: 60px; /* Комбобокс будет немного шире */
+        background-color: #fff;
+        text-align: center;
+    }
+
+    .submit-button {
+        background-color: #8A2BE2;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        border: none;
+        padding: 0 15px;
+        transition: background-color 0.3s;
+    }
+
+        .submit-button:hover {
+            background-color: #6a1bb8;
+        }
+
+    .result-field {
+        width: 100px; /* Ширина поля для вывода результата */
+        background-color: #e8e0f4;
+        font-weight: bold;
+        text-align: center;
+        pointer-events: none;
+    }
+</style>
