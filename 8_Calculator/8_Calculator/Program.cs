@@ -1,10 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var constring = builder.Configuration.GetConnectionString("CalculatorDatabase");
+builder.Services.AddDbContext<BatabaseContext>(opt => opt.UseMySql(constring, new MySqlServerVersion(new Version(10,5))));
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
