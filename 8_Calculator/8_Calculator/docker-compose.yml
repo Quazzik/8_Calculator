@@ -3,7 +3,7 @@ version: '3.7'
 services:     
   mariadb:
     container_name: 8_web-mariadb
-    hostname: mariadb
+    hostname: 1-Unnamed
     image: mariadb:10.5
     restart: always
     environment:
