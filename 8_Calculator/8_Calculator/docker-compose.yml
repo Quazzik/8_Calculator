@@ -2,19 +2,23 @@ version: '3.7'
 
 services:     
   mariadb:
-    container_name: 8_web-mariadb
+    container_name: 8-web-mariadb
     hostname: mariadb
-    image: mariadb:10.5
+    image: mariadb:11.2
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: password
       MARIADB_DATABASE: 8_WebCalculatorDB
+      MARIADB_USER: root
+      MARIADB_PASSWORD: password
     ports:
-      - "0.0.0.0:5028:3306"
+      - "5028:3306"
       
   web:
     container_name: 8_Calculator
     hostname: api
     build: ./
+    depends_on:
+      - mariadb
     ports:
-      - "0.0.0.0:5008:5008"
+      - "5008:5008"
