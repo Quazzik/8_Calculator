@@ -26,4 +26,5 @@ WORKDIR /app
 COPY --from=publish /app/publish ./
 
 # Определяем команду запуска контейнера
+ENTRYPOINT ["dotnet", "dotnet ef database update"]
 ENTRYPOINT ["dotnet", "8_Calculator.dll"]
