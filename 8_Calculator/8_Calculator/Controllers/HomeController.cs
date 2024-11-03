@@ -19,22 +19,25 @@ namespace _8_Calculator.Controllers
         [HttpGet]
         public IActionResult Index(int page = 1)
         {
-            const int pageSize = 8; // количество записей на странице
-            var calculations = _context.Calculations.ToList();
-            calculations.Reverse();
-
-            foreach (var calculation in calculations)
+            if (_context.Calculations != null)
             {
-                calculation.Operation = OperationEnum.Convert(calculation.Operation);
+                const int pageSize = 8; // количество записей на странице
+                var calculations = _context.Calculations.ToList();
+                calculations.Reverse();
+
+                foreach (var calculation in calculations)
+                {
+                    calculation.Operation = OperationEnum.Convert(calculation.Operation);
+                }
+
+                var totalCount = calculations.Count;
+                var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+                var results = calculations.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                ViewBag.Calculations = results;
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
             }
-
-            var totalCount = calculations.Count;
-            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-            var results = calculations.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-            ViewBag.Calculations = results;
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
 
             return View();
         }
