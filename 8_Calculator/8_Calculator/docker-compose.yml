@@ -4,7 +4,7 @@ services:
   mariadb:
     container_name: 8-web-mariadb
     hostname: mariadb
-    image: mariadb:11.2
+    image: mariadb:10.5
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: password
@@ -12,13 +12,11 @@ services:
       MARIADB_USER: root
       MARIADB_PASSWORD: password
     ports:
-      - "5028:3306"
+      - "0.0.0.0:5028:3306"
       
   web:
     container_name: 8_Calculator
-    hostname: api
+    hostname: app
     build: ./
-    depends_on:
-      - mariadb
     ports:
-      - "5008:5008"
+      - "0.0.0.0:5008:5008"
