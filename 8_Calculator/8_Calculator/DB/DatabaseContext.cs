@@ -3,10 +3,10 @@ using _8_Calculator.DB.Entities;
 using _8_Calculator.Enums;
 using static _8_Calculator.Enums.OperationEnum;
 
-public class BatabaseContext : DbContext
+public class DatabaseContext : DbContext
 {
 
-    public BatabaseContext(DbContextOptions options) : base(options)
+    public DatabaseContext(DbContextOptions options) : base(options)
     {
     }
 

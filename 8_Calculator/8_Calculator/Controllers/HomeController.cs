@@ -9,11 +9,13 @@ namespace _8_Calculator.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly BatabaseContext _context;
+        private readonly DatabaseContext _context;
+        private readonly CalcLib _calcLib;
 
-        public HomeController(BatabaseContext context)
+        public HomeController(DatabaseContext context)
         {
             _context = context;
+            _calcLib = new CalcLib(context);
         }
 
         [HttpGet]
@@ -43,15 +45,9 @@ namespace _8_Calculator.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
-            var calculation = _context.Calculations.Find(Id);
-
-            if (calculation != null)
-            {
-                _context.Calculations.Remove(calculation);
-                _context.SaveChanges();
-            }
+            _calcLib.Delete(id);
             return RedirectToAction("Index");
         }
 
@@ -59,34 +55,7 @@ namespace _8_Calculator.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Calculate(double num1, double num2, OperationType operation)
         {
-            double result = 0;
-            switch (operation)
-            {
-                case OperationType.Add:
-                    result = num1 + num2;
-                    break;
-                case OperationType.Subtract:
-                    result = num1 - num2;
-                    break;
-                case OperationType.Multiply:
-                    result = num1 * num2;
-                    break;
-                case OperationType.Divide:
-                    result = num1 / num2;
-                    break;
-            }
-            TempData["Result"] = result.ToString();
-
-            var calc = new Calculation
-            {
-                Operand1 = num1,
-                Operand2 = num2,
-                Result = result,
-                Operation = operation.ToString()
-            };
-            _context.Calculations.Add(calc);
-            _context.SaveChanges();
-
+            TempData["Result"] = _calcLib.Calculate(num1, num2, operation.ToString());
             return RedirectToAction("Index");
         }
     }
