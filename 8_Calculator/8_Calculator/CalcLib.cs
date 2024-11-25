@@ -1,4 +1,5 @@
 ﻿using _8_Calculator.DB.Entities;
+using _8_Calculator.DTOs;
 using _8_Calculator.Kafka;
 using Confluent.Kafka;
 using System.Text.Json;
@@ -23,26 +24,33 @@ namespace _8_Calculator
             if (calculation != null)
             {
                 _context.Calculations.Remove(calculation);
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
             }
             return;
         }
 
-        public async Task<string> Calculate(double num1, double num2, string operation)
+        public string Calculate(double num1, double num2, string operation)
         {
             var res = GetResult(num1,num2,operation);
 
-            await SendDataToKafka(res);
+            SendDataToKafka(res);
 
             _context.Calculations.Add(res);
             _context.SaveChanges();
-            return res.ToString();
+            return res.Result.ToString();
         }
 
-        private async Task SendDataToKafka(Calculation data)
+        private void SendDataToKafka(Calculation res)
         {
+            var data = new CalcDTO
+            {
+                Operand1 = res.Operand1,
+                Operand2 = res.Operand2,
+                Operation = res.Operation,
+                Result = res.Result,
+            };
             var json = JsonSerializer.Serialize(data);
-            await _producer.ProduceAsync("KorotkovYuA", new Message<Null, string> { Value = json });
+            _producer.Produce("KorotkovYuA", new Message<Null, string> { Value = json });
         }
 
         public static Calculation GetResult(double num1, double num2, string operation)

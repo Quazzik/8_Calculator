@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 var constring = builder.Configuration.GetConnectionString("CalculatorDatabase");
 builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseMySql(constring, new MySqlServerVersion(new Version(10,5))));
+builder.Services.AddHttpClient();
 builder.Services.AddHostedService<KafkaConsumerService>();
 builder.Services.AddSingleton<KafkaProducerHandler>();
 builder.Services.AddSingleton<KafkaProducerService<Null, string>>();
