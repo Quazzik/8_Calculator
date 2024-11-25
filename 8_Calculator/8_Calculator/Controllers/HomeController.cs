@@ -1,8 +1,7 @@
-using _8_Calculator.DB.Entities;
 using _8_Calculator.Enums;
+using _8_Calculator.Kafka;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
 using static _8_Calculator.Enums.OperationEnum;
 
 namespace _8_Calculator.Controllers
@@ -12,10 +11,10 @@ namespace _8_Calculator.Controllers
         private readonly DatabaseContext _context;
         private readonly CalcLib _calcLib;
 
-        public HomeController(DatabaseContext context)
+        public HomeController(DatabaseContext context, KafkaProducerService<Null, string> producer)
         {
             _context = context;
-            _calcLib = new CalcLib(context);
+            _calcLib = new CalcLib(context, producer);
         }
 
         [HttpGet]

@@ -1,15 +1,19 @@
 ﻿using _8_Calculator.DB.Entities;
-using static _8_Calculator.Enums.OperationEnum;
+using _8_Calculator.Kafka;
+using Confluent.Kafka;
+using System.Text.Json;
 
 namespace _8_Calculator
 {
     public class CalcLib
     {
         private readonly DatabaseContext _context;
+        private readonly KafkaProducerService<Null, string> _producer;
 
-        public CalcLib(DatabaseContext context)
+        public CalcLib(DatabaseContext context, KafkaProducerService<Null, string> producer)
         {
             _context = context;
+            _producer = producer;
         }
 
         public void Delete(int id)
@@ -24,13 +28,21 @@ namespace _8_Calculator
             return;
         }
 
-        public string Calculate(double num1, double num2, string operation)
+        public async Task<string> Calculate(double num1, double num2, string operation)
         {
             var res = GetResult(num1,num2,operation);
+
+            await SendDataToKafka(res);
 
             _context.Calculations.Add(res);
             _context.SaveChanges();
             return res.ToString();
+        }
+
+        private async Task SendDataToKafka(Calculation data)
+        {
+            var json = JsonSerializer.Serialize(data);
+            await _producer.ProduceAsync("KorotkovYuA", new Message<Null, string> { Value = json });
         }
 
         public static Calculation GetResult(double num1, double num2, string operation)

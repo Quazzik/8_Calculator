@@ -1,18 +1,9 @@
-﻿namespace _8_Calculator.Kafka
-{
-    using System;
-    using System.Text.Json;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Confluent.Kafka;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using System.Net.Http;
-    using _8_Calculator.DB.Entities;
-    using static _8_Calculator.Enums.OperationEnum;
-    using _8_Calculator.Controllers;
+﻿using System.Text.Json;
+using Confluent.Kafka;
+using _8_Calculator.DB.Entities;
 
+namespace _8_Calculator.Kafka
+{
     public class KafkaConsumerService : BackgroundService
     {
         private readonly string _topic;
