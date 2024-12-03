@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'cd 8_Calculator/8_Calculator'
-                sh 'ls -l'
+                sh 'ls -R 8_Calculator'
                 sh 'docker compose build'
             }
         }
