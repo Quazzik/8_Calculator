@@ -10,9 +10,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'ls -l'
-                sh 'cd 8_Calculator'
-                sh 'ls -l'
-                sh 'cd 8_Calculator'
+                sh 'cd 8_Calculator/8_Calculator'
                 sh 'ls -l'
                 sh 'docker compose build'
             }
