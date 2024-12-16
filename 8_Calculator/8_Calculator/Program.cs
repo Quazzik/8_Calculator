@@ -56,7 +56,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseEndpoints(endpoints => endpoints.MapMetrics());
+//app.UseEndpoints(endpoints => endpoints.MapMetrics());
 app.UseAuthorization();
 
 app.MapControllerRoute(
